@@ -1,0 +1,19 @@
+﻿@page "/"
+
+@inject InsCorpDbContext db
+<PageTitle>Počet osob</PageTitle>
+
+<h1>Počet osob v db: @cnt</h1>
+
+Welcome to your new app.
+
+@code{
+    int cnt;
+
+    protected override void OnInitialized()
+    {
+        cnt = db.Persons.Count();
+    }
+
+    
+}
