@@ -1,2 +1,2 @@
-# asp2
-skoleni asp2 2024-02
+## Visual Studio Community
+https://visualstudio.microsoft.com/downloads/
