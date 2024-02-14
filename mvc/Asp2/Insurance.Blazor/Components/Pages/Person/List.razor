@@ -18,18 +18,20 @@
             <td>@person.LastName</td>
             <td>@person.DateOfBirth.ToShortDateString()</td>
             <td><a href="/person/detail/@person.Id">@person.Email</a></td>
-            <td><a class="btn btn-primary btn-sm" style="background:blue;" href="/person/detail/@person.Id">Detail</a>
+            <td>
+                <a class="btn btn-primary btn-sm" style="background:blue;" href="/person/detail/@person.Id">Detail</a>
                 <a class="btn btn-secondary btn-sm" style="background:blue;" href="/person/edit/@person.Id">Editovat</a>
                 <button @onclick="() => Edit(person.Id)"> Test button</button>
             </td>
         </tr>
     }
 </table>
-<button @onclick="Prev">Prev page</button>
+<button disabled="@PrevDisabled" @onclick="Prev">Prev page</button>
 <button @onclick="Next">Next page</button>
 @code {
     List<Person> people = new List<Person>();
     int currentPage = 0;
+    public bool PrevDisabled => currentPage == 0;
     protected override void OnInitialized()
     {
         LoadPeople();
@@ -54,7 +56,7 @@
     void Prev()
     {
         if (currentPage > 0)
-        --currentPage;
+            --currentPage;
         LoadPeople();
     }
 }
