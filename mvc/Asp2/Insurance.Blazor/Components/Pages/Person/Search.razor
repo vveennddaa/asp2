@@ -1,0 +1,71 @@
+﻿@page "/person/search"
+
+<h3>Hledej osoby podle emailu:</h3>
+
+<EditForm Model="text" OnSubmit="Find">
+    <div class="row">
+        <div class="col-auto">
+            <label>Email:</label>
+        </div>
+        <div class="col-auto">
+            <InputText @bind-Value="text" class="form-control"/>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-primary" type="submit">Hledej</button>
+        </div>
+    </div>
+
+</EditForm>
+
+@if(persons != null && persons.Count > 0)
+{
+    <table class="table">
+        <tr>
+            <td>Jméno</td>
+            <td>Příimení</td>
+            <td>Datum narození</td>
+            <td>Email</td>
+            <td></td>
+        </tr>
+        @foreach (var person in persons)
+        {
+            <tr>
+                <td>@person.FirstName</td>
+                <td>@person.LastName</td>
+                <td>@person.DateOfBirth.ToShortDateString()</td>
+                <td><a href="/person/detail/@person.Id">@person.Email</a></td>
+                <td>
+                    <a class="btn btn-primary btn-sm" style="background:blue;" href="/person/detail/@person.Id">Detail</a>
+                    <a class="btn btn-secondary btn-sm" style="background:blue;" href="/person/edit/@person.Id">Editovat</a>
+                    
+                </td>
+            </tr>
+        }
+    </table>
+}
+else
+{
+    <p>No data.</p>
+}
+
+@code {
+    string text = "";
+    List<Person> persons;
+
+    async Task Find()
+    {
+        using HttpClient client = new HttpClient();
+
+        var apiurl = $"https://localhost:7160/api/person/findByEmail/{text}";
+        try
+        {
+            var result = await client.GetFromJsonAsync<List<Person>>(apiurl);
+            persons = result?.ToList();
+        }
+        catch (Exception)
+        {
+            
+            throw;
+        }
+    }
+}
