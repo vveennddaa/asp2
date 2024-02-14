@@ -1,5 +1,6 @@
 ﻿@page "/person/list"
 @inject InsCorpDbContext db
+@inject NavigationManager nav
 
 <h3>Seznam osob</h3>
 <table class="table">
@@ -8,6 +9,7 @@
         <td>Příimení</td>
         <td>Datum narození</td>
         <td>Email</td>
+        <td></td>
     </tr>
     @foreach (var person in people)
     {
@@ -15,7 +17,11 @@
             <td>@person.FirstName</td>
             <td>@person.LastName</td>
             <td>@person.DateOfBirth.ToShortDateString()</td>
-            <td>@person.Email</td>
+            <td><a href="/person/detail/@person.Id">@person.Email</a></td>
+            <td><a class="btn btn-primary btn-sm" style="background:blue;" href="/person/detail/@person.Id">Detail</a>
+                <a class="btn btn-secondary btn-sm" style="background:blue;" href="/person/edit/@person.Id">Editovat</a>
+                <button @onclick="() => Edit(person.Id)"> Test button</button>
+            </td>
         </tr>
     }
 </table>
@@ -25,5 +31,10 @@
     protected override void OnInitialized()
     {
         people = db.Persons.Take(20).ToList();
+    }
+
+    void Edit(int id)
+    {
+        nav.NavigateTo($"/person/detail/{id}");
     }
 }
