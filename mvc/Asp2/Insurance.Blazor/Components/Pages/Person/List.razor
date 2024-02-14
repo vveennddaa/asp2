@@ -25,16 +25,36 @@
         </tr>
     }
 </table>
+<button @onclick="Prev">Prev page</button>
+<button @onclick="Next">Next page</button>
 @code {
     List<Person> people = new List<Person>();
-
+    int currentPage = 0;
     protected override void OnInitialized()
     {
-        people = db.Persons.Take(20).ToList();
+        LoadPeople();
     }
 
     void Edit(int id)
     {
         nav.NavigateTo($"/person/detail/{id}");
+    }
+
+    void LoadPeople()
+    {
+        people = db.Persons.Skip(currentPage * 20).Take(20).ToList();
+    }
+
+    void Next()
+    {
+        ++currentPage;
+        LoadPeople();
+    }
+
+    void Prev()
+    {
+        if (currentPage > 0)
+        --currentPage;
+        LoadPeople();
     }
 }
